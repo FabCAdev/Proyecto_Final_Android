@@ -3,45 +3,31 @@ package com.example.proyecto_final
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.proyecto_final.ui.theme.Proyecto_FinalTheme
+import androidx.navigation.compose.rememberNavController
+import com.proyectofinal.ui.navigation.AppNavigation
+import com.proyectofinal.ui.theme.Proyecto_FinalTheme // Asegúrate de que coincida con el nombre de tu tema generado
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             Proyecto_FinalTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    // 1. Inicializamos el control de navegación de Jetpack Compose
+                    val navController = rememberNavController()
+
+                    // 2. Llamamos a tu mapa de navegación pasando el controlador
+                    AppNavigation(navController = navController)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Proyecto_FinalTheme {
-        Greeting("Android")
     }
 }

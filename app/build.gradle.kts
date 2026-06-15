@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
 }
 
 android {
@@ -48,6 +49,15 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    // ... tus otras dependencias existentes ...
+
+    // 1. Dependencia fundamental de Navegación en Jetpack Compose
+    implementation("androidx.navigation:navigation-compose:2.8.5")
+
+    // 2. Dependencia para serializar los argumentos/destinos de las pantallas de forma segura
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
