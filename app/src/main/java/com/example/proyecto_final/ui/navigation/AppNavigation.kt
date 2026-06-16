@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.example.proyecto_final.ui.screens.detail.DetailScreen
 import com.example.proyecto_final.ui.screens.home.HomeScreen
 import com.example.proyecto_final.ui.screens.login.LoginScreen
 
@@ -37,6 +38,13 @@ fun AppNavigation(navController: NavHostController) {
 
         composable<DetailDestination> { backStackEntry ->
             val args = backStackEntry.toRoute<DetailDestination>()
+
+            DetailScreen(
+                gameName = args.gameName,
+                onNavigateBack = {
+                    navController.popBackStack() // Regresa de manera segura a la HomeScreen
+                }
+            )
         }
 
         composable<SearchDestination> { }
