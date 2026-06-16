@@ -8,6 +8,7 @@ import androidx.navigation.toRoute
 import com.example.proyecto_final.ui.screens.detail.DetailScreen
 import com.example.proyecto_final.ui.screens.home.HomeScreen
 import com.example.proyecto_final.ui.screens.login.LoginScreen
+import com.example.proyecto_final.ui.search.SearchScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
@@ -47,7 +48,18 @@ fun AppNavigation(navController: NavHostController) {
             )
         }
 
-        composable<SearchDestination> { }
+        composable<SearchDestination> {
+            SearchScreen(
+                onNavigateToDetail = { gameName ->
+                    // Si el usuario encuentra el juego y lo presiona, lo manda directo al detalle
+                    navController.navigate(DetailDestination(gameName = gameName))
+                },
+                onNavigateBack = {
+                    // Regresa al Home
+                    navController.popBackStack()
+                }
+            )
+        }
 
         composable<ProfileDestination> { }
     }
