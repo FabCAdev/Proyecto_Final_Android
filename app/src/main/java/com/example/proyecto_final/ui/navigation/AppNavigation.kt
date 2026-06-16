@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.example.proyecto_final.ui.profile.ProfileScreen
 import com.example.proyecto_final.ui.screens.detail.DetailScreen
 import com.example.proyecto_final.ui.screens.home.HomeScreen
 import com.example.proyecto_final.ui.screens.login.LoginScreen
@@ -61,6 +62,19 @@ fun AppNavigation(navController: NavHostController) {
             )
         }
 
-        composable<ProfileDestination> { }
+        composable<ProfileDestination> {
+            ProfileScreen(
+                onLogout = {
+                    // Regresa al Login limpiando todo el historial para que no pueda volver con el botón "Atrás"
+                    navController.navigate(LoginDestination) {
+                        popUpTo(HomeDestination) { inclusive = true }
+                    }
+                },
+                onNavigateBack = {
+                    // Regresa al catálogo de juegos
+                    navController.popBackStack()
+                }
+            )
+        }
     }
 }
