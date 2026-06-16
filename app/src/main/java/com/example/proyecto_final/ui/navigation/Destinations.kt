@@ -3,6 +3,9 @@ package com.example.proyecto_final.ui.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
+object LoginDestination
+
+@Serializable
 object HomeDestination
 
 @Serializable

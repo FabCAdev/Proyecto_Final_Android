@@ -50,13 +50,20 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
 
-    // ... tus otras dependencias existentes ...
-
     // 1. Dependencia fundamental de Navegación en Jetpack Compose
     implementation("androidx.navigation:navigation-compose:2.8.5")
 
     // 2. Dependencia para serializar los argumentos/destinos de las pantallas de forma segura
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
+    // Retrofit Base
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+
+    // El convertidor oficial (debe ser la misma versión 2.11.0 para que se incluya el paquete interno)
+    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.11.0")
+
+    // Coil para las fotos
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
