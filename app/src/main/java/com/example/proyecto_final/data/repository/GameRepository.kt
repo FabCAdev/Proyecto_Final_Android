@@ -3,7 +3,9 @@ package com.example.proyecto_final.data.repository
 import com.example.proyecto_final.data.model.AuthResponse
 import com.example.proyecto_final.data.model.GameResponse
 import com.example.proyecto_final.data.model.LoginRequest
+import com.example.proyecto_final.data.model.MessageResponse
 import com.example.proyecto_final.data.network.RetrofitClient
+import com.example.proyecto_final.data.network.SessionManager
 
 /**
  * Repositorio que actúa como fuente única de verdad para los datos de la aplicación.
@@ -39,6 +41,33 @@ class GameRepository {
      * @return [AuthResponse] con el token y la información del usuario.
      */
     suspend fun login(request: LoginRequest): AuthResponse {
-        return apiService.login(request)
+        val response = apiService.login(request)
+        // Guardamos el token para las peticiones autenticadas (Jugar Después).
+        SessionManager.token = response.token
+        return response
+    }
+
+    /**
+     * Obtiene la lista de juegos marcados como "Jugar Después" del usuario.
+     * Requiere una sesión activa (token JWT).
+     */
+    suspend fun getLaterGames(): List<GameResponse> {
+        return apiService.getLater(SessionManager.bearer)
+    }
+
+    /**
+     * Agrega un juego a la lista "Jugar Después".
+     * @param gameId Identificador (_id) del juego.
+     */
+    suspend fun addToLater(gameId: String): MessageResponse {
+        return apiService.addToLater(SessionManager.bearer, gameId)
+    }
+
+    /**
+     * Elimina un juego de la lista "Jugar Después".
+     * @param gameId Identificador (_id) del juego.
+     */
+    suspend fun removeFromLater(gameId: String): MessageResponse {
+        return apiService.removeFromLater(SessionManager.bearer, gameId)
     }
 }
