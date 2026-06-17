@@ -65,6 +65,9 @@ dependencies {
     // Coil para las fotos
     implementation("io.coil-kt:coil-compose:2.6.0")
 
+    // ViewModel para Compose (MVVM)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
