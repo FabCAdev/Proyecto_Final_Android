@@ -1,19 +1,23 @@
 package com.example.proyecto_final.ui.screens.detail
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.proyecto_final.ui.components.PrimaryGameButton
 import com.example.proyecto_final.ui.state.UiState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,10 +29,21 @@ fun DetailScreen(
 ) {
     // Observamos el estado reactivo del ViewModel
     val uiState by viewModel.uiState.collectAsState()
+    val actionMessage by viewModel.actionMessage.collectAsState()
+
+    val context = LocalContext.current
 
     // Disparamos la carga del detalle cuando cambia el nombre del juego
     LaunchedEffect(gameName) {
         viewModel.loadGameDetail(gameName)
+    }
+
+    // Mostramos el resultado de "Jugar Después" como Toast
+    LaunchedEffect(actionMessage) {
+        actionMessage?.let { mensaje ->
+            Toast.makeText(context, mensaje, Toast.LENGTH_SHORT).show()
+            viewModel.consumeActionMessage()
+        }
     }
 
     Scaffold(
@@ -122,6 +137,16 @@ fun DetailScreen(
                                 text = if (game.description.isBlank()) "Este videojuego no tiene una descripción disponible actualmente." else game.description,
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+
+                            Spacer(modifier = Modifier.height(28.dp))
+
+                            // Acción: agregar este juego a la lista "Jugar Después"
+                            PrimaryGameButton(
+                                text = "Jugar Después",
+                                icon = Icons.Default.Add,
+                                onClick = { viewModel.addToLater(game._id) },
+                                modifier = Modifier.fillMaxWidth()
                             )
                         }
                     }

@@ -8,6 +8,7 @@ import androidx.navigation.toRoute
 import com.example.proyecto_final.ui.profile.ProfileScreen
 import com.example.proyecto_final.ui.screens.detail.DetailScreen
 import com.example.proyecto_final.ui.screens.home.HomeScreen
+import com.example.proyecto_final.ui.screens.later.LaterScreen
 import com.example.proyecto_final.ui.screens.login.LoginScreen
 import com.example.proyecto_final.ui.search.SearchScreen
 
@@ -34,7 +35,8 @@ fun AppNavigation(navController: NavHostController) {
                     navController.navigate(DetailDestination(gameName = gameName))
                 },
                 onNavigateToSearch = { navController.navigate(SearchDestination) },
-                onNavigateToProfile = { navController.navigate(ProfileDestination) }
+                onNavigateToProfile = { navController.navigate(ProfileDestination) },
+                onNavigateToLater = { navController.navigate(LaterDestination) }
             )
         }
 
@@ -57,6 +59,17 @@ fun AppNavigation(navController: NavHostController) {
                 },
                 onNavigateBack = {
                     // Regresa al Home
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable<LaterDestination> {
+            LaterScreen(
+                onNavigateToDetail = { gameName ->
+                    navController.navigate(DetailDestination(gameName = gameName))
+                },
+                onNavigateBack = {
                     navController.popBackStack()
                 }
             )

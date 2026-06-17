@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Warning
@@ -44,6 +45,7 @@ fun HomeScreen(
     onNavigateToDetail: (String) -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToProfile: () -> Unit,
+    onNavigateToLater: () -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
     // Observamos el estado reactivo del ViewModel de forma pasiva
@@ -56,6 +58,12 @@ fun HomeScreen(
                 actions = {
                     IconButton(onClick = onNavigateToSearch) {
                         Icon(imageVector = Icons.Default.Search, contentDescription = "Buscar")
+                    }
+                    IconButton(onClick = onNavigateToLater) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.List,
+                            contentDescription = "Jugar Después"
+                        )
                     }
                     IconButton(onClick = onNavigateToProfile) {
                         Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Perfil")

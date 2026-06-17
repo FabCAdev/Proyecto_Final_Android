@@ -16,3 +16,6 @@ object SearchDestination
 
 @Serializable
 object ProfileDestination
+
+@Serializable
+object LaterDestination

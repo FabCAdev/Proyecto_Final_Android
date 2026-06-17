@@ -24,6 +24,10 @@ class DetailViewModel : ViewModel() {
     /** Estado observable del detalle del juego. */
     val uiState: StateFlow<UiState<GameResponse>> = _uiState.asStateFlow()
 
+    private val _actionMessage = MutableStateFlow<String?>(null)
+    /** Mensaje puntual de la acción "Jugar Después" (para mostrar un Toast). */
+    val actionMessage: StateFlow<String?> = _actionMessage.asStateFlow()
+
     /** Nombre del juego que se está consultando (para reintentos). */
     private var currentGameName: String = ""
 
@@ -50,6 +54,26 @@ class DetailViewModel : ViewModel() {
                 )
             }
         }
+    }
+
+    /**
+     * Agrega el juego actual a la lista "Jugar Después" (requiere sesión activa).
+     * @param gameId Identificador (_id) del juego.
+     */
+    fun addToLater(gameId: String) {
+        viewModelScope.launch {
+            try {
+                val response = repository.addToLater(gameId)
+                _actionMessage.value = response.mensaje
+            } catch (e: Exception) {
+                _actionMessage.value = e.message ?: "No se pudo agregar a Jugar Después"
+            }
+        }
+    }
+
+    /** Limpia el mensaje de acción una vez mostrado. */
+    fun consumeActionMessage() {
+        _actionMessage.value = null
     }
 
     /** Reintenta la carga del último juego consultado. */
