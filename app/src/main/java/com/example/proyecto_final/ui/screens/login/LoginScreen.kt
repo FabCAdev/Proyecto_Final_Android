@@ -9,20 +9,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.proyecto_final.data.model.LoginRequest
-import com.example.proyecto_final.data.network.RetrofitClient
-import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.proyecto_final.ui.state.UiState
 
 @Composable
 fun LoginScreen(
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    viewModel: LoginViewModel = viewModel()
 ) {
+    // Estado de los campos de texto (estado de UI puro, se mantiene en el composable)
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var isLoading by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
+
+    // Observamos el estado reactivo del proceso de login
+    val loginState by viewModel.loginState.collectAsState()
+
+    // Determinamos si la UI debe estar bloqueada (durante la carga)
+    val isLoading = loginState is UiState.Loading
+
+    // Efecto lateral: cuando el login es exitoso, navegamos y mostramos el Toast
+    LaunchedEffect(loginState) {
+        val state = loginState
+        if (state is UiState.Success) {
+            Toast.makeText(
+                context,
+                "¡Bienvenido ${state.data.usuario.username}!",
+                Toast.LENGTH_SHORT
+            ).show()
+            onLoginSuccess()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -56,39 +74,38 @@ fun LoginScreen(
             enabled = !isLoading
         )
 
+        // Mostrar mensaje de error inline si falló el login
+        if (loginState is UiState.Error) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = (loginState as UiState.Error).message,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
 
         if (isLoading) {
+            // Estado de Carga: indicador circular
             CircularProgressIndicator()
         } else {
             Button(
                 onClick = {
                     if (username.isBlank() || password.isBlank()) {
-                        Toast.makeText(context, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Por favor llena todos los campos",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         return@Button
                     }
-
-                    isLoading = true
-                    coroutineScope.launch {
-                        try {
-                            // Llamada directa a tu API de Node.js mediante Retrofit
-                            val response = RetrofitClient.instance.login(
-                                LoginRequest(username = username, password = password)
-                            )
-
-                            isLoading = false
-                            Toast.makeText(context, "¡Bienvenido ${response.usuario.username}!", Toast.LENGTH_SHORT).show()
-
-                            // 💡 Nota: Aquí idealmente guardarías response.token en SharedPreferences más adelante
-
-                            onLoginSuccess() // Navega al Home
-                        } catch (e: Exception) {
-                            isLoading = false
-                            Toast.makeText(context, "Error: Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show()
-                        }
-                    }
+                    // Delegamos la lógica de autenticación al ViewModel
+                    viewModel.login(username, password)
                 },
-                modifier = Modifier.fillMaxWidth().height(50.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
             ) {
                 Text("Ingresar")
             }
