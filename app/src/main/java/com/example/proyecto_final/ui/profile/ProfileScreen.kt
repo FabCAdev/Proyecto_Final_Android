@@ -3,8 +3,8 @@ package com.example.proyecto_final.ui.profile
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -95,7 +95,7 @@ fun ProfileScreen(
                 ),
                 modifier = Modifier.fillMaxWidth().height(50.dp)
             ) {
-                Icon(imageVector = Icons.Default.ExitToApp, contentDescription = null)
+                Icon(imageVector = Icons.AutoMirrored.Filled.ExitToApp, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Cerrar Sesión")
             }
